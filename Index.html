@@ -541,6 +541,22 @@
         window.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeLightbox(); closeAgeModal(); closeModal('aboutModal'); } });
 
         window.onload = () => { setupCategories(); fetchImages(); };
+        // ===== ABOUT MODAL FUNCTIONS =====
+function openModal(id) {
+    const modal = document.getElementById(id);
+    if (!modal) return;
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal(id) {
+    const modal = document.getElementById(id);
+    if (!modal) return;
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    document.body.style.overflow = 'auto';
+}
     </script>
 </body>
 </html>
