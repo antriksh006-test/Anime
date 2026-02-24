@@ -1,0 +1,16 @@
+{
+  "name": "Anime Hub | Ultimate Gallery",
+  "short_name": "AnimeHub",
+  "description": "Premium Anime Art & GIF Gallery",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#8b5cf6",
+  "icons": [
+    {
+      "src": "https://i.pinimg.com/736x/c3/61/ae/c361ae10d980f4a4153df70bdb77b71f.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ]
+}
