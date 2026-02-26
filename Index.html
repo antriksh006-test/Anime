@@ -1,12 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta name="google-site-verification" content="GAFtxEepvYnQvF145-T8hoBJyJY-FzdSeld5MOmTUk0" />
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anime Hub | Ultimate Gallery</title>
-    <!-- Favicon -->
-    <link rel="canonical" href="https://anime-hubb.netlify.app/" />
+        <link rel="canonical" href="https://anime-hubb.netlify.app/" />
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#8b5cf6">
     <meta name="title" content="Anime Hub | Ultimate Anime Art & GIF Gallery">
@@ -31,223 +26,234 @@
     <link rel="icon" type="image/png" href="https://i.pinimg.com/736x/8e/66/7e/8e667eb43ccda5c0a3712563a67f7587.jpg">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Anime Hub | Mobile</title>
+    <link rel="icon" type="image/png" href="https://share.google/3Bm53WcyAEYFTXjRi">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --app-height: 100%;
+            --safe-top: env(safe-area-inset-top);
+            --safe-bottom: env(safe-area-inset-bottom);
+        }
+
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: #020617;
             color: #f8fafc;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
+            -webkit-tap-highlight-color: transparent;
+            overscroll-behavior-y: contain;
         }
 
+        /* Mobile-Optimized Masonry */
         .masonry-grid {
-            columns: 2;
-            column-gap: 0.75rem;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            padding: 8px;
         }
-        @media (min-width: 768px) { .masonry-grid { columns: 3; } }
-        @media (min-width: 1024px) { .masonry-grid { columns: 4; } }
-        @media (min-width: 1536px) { .masonry-grid { columns: 5; } }
 
         .masonry-item {
-            break-inside: avoid;
-            margin-bottom: 0.75rem;
-            transform: translateZ(0);
+            position: relative;
+            width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #0f172a;
         }
 
-        .glass-nav {
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: saturate(180%) blur(12px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        /* Glass Effects */
+        .glass-header {
+            background: rgba(2, 6, 23, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: var(--safe-top);
         }
 
-        .img-card {
-            transition: transform 0.2s ease, filter 0.2s ease;
-            will-change: transform;
+        .glass-footer {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: var(--safe-bottom);
         }
 
-        .img-card:hover {
-            transform: translateY(-2px);
-            filter: brightness(1.05);
+        #progress {
+            height: 2px;
+            background: #8b5cf6;
+            width: 0%;
+            transition: width 0.1s;
         }
 
-        .skeleton {
-            background: linear-gradient(90deg, #0f172a 25%, #1e293b 50%, #0f172a 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.2s infinite linear;
-            border-radius: 0.75rem;
+        .img-reveal {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .img-reveal.loaded {
+            opacity: 1;
+            transform: translateY(0);
         }
 
-        @keyframes shimmer {
-            to { background-position: -200% 0; }
-        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        .tab-active {
-            background: rgba(139, 92, 246, 0.15);
-            border-color: rgba(139, 92, 246, 0.4);
+        .tab-btn {
+            position: relative;
+            transition: all 0.3s;
+        }
+        .tab-btn.active {
             color: #a78bfa;
         }
-
-        #backToTop {
-            opacity: 0;
-            pointer-events: none;
-            transition: 0.3s;
-        }
-        #backToTop.visible {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .fav-active {
-            color: #ef4444 !important;
-            fill: #ef4444 !important;
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: #a78bfa;
         }
 
-        .img-entry {
-            opacity: 0;
-            transform: scale(0.98);
-            filter: blur(4px);
-            transition: opacity 0.4s ease, transform 0.4s ease, filter 0.3s ease;
+        .toast-mobile {
+            bottom: 100px;
         }
-        .img-loaded {
-            opacity: 1;
-            transform: scale(1);
-            filter: blur(0);
-        }
-
-        .custom-scrollbar::-webkit-scrollbar { width: 5px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: #020617; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
-
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="custom-scrollbar">
+<body class="selection:bg-purple-500/30">
 
-    <!-- Age Verification -->
-    <div id="ageModal" class="fixed inset-0 z-[200] hidden flex items-center justify-center p-6 bg-black/90 backdrop-blur-md">
-        <div class="max-w-md w-full bg-slate-900 border border-white/5 rounded-3xl p-8 text-center shadow-2xl">
-            <h2 class="text-xl font-bold mb-4">Adult Content</h2>
-            <p class="text-slate-400 mb-6 text-sm">Please confirm you are 18+ to view NSFW categories in Anime Hub.</p>
-            <div class="flex flex-col gap-2">
-                <button onclick="verifyAge()" class="w-full bg-red-600 font-bold py-3 rounded-xl hover:bg-red-700 transition-colors">Enter</button>
-                <button onclick="closeAgeModal()" class="w-full bg-slate-800 py-3 rounded-xl hover:bg-slate-700 transition-colors">Cancel</button>
+    <!-- Header -->
+    <header class="glass-header fixed top-0 inset-x-0 z-40">
+        <div class="px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-2" onclick="scrollToTop()">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-purple-600 to-blue-600 flex items-center justify-center shadow-lg">
+                    <img src="https://share.google/3Bm53WcyAEYFTXjRi" class="w-6 h-6 object-contain">
+                </div>
+                <span class="font-bold text-lg tracking-tight">AnimeHub</span>
             </div>
-        </div>
-    </div>
-
-    <!-- About Modal -->
-    <div id="aboutModal" class="fixed inset-0 z-[200] hidden flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm">
-        <div class="max-w-md w-full bg-slate-900 border border-white/5 rounded-3xl p-8 shadow-2xl relative">
-            <button onclick="closeModal('aboutModal')" class="absolute top-4 right-4 text-slate-500 hover:text-white transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-            </button>
-            <h2 class="text-2xl font-bold mb-4 text-white">About Anime Hub</h2>
-            <p class="text-slate-400 text-sm leading-relaxed mb-6">
-                Anime Hub is a high-performance, minimalist gallery designed for fans of anime art. We provide instant access to thousands of images, stickers, and GIFs powered by the waifu.pics API.
-            </p>
-            <div class="space-y-3">
-                <div class="flex items-center gap-3 text-sm text-slate-300">
-                    <div class="w-2 h-2 rounded-full bg-purple-500"></div>
-                    <span>PNG, GIF & Animated Sticker Filtering</span>
-                </div>
-                <div class="flex items-center gap-3 text-sm text-slate-300">
-                    <div class="w-2 h-2 rounded-full bg-purple-500"></div>
-                    <span>Direct Content Sharing</span>
-                </div>
-                <div class="flex items-center gap-3 text-sm text-slate-300">
-                    <div class="w-2 h-2 rounded-full bg-purple-500"></div>
-                    <span>Private local collections</span>
+            <div class="flex items-center gap-2">
+                <button onclick="openModal('aboutModal')" class="p-2 text-slate-400 hover:text-white transition-colors" title="About">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                </button>
+                <div class="flex items-center gap-1 bg-white/5 p-1 rounded-full border border-white/5">
+                    <button onclick="handleToggle('sfw')" id="sfwBtn" class="px-3 py-1 rounded-full text-[10px] font-bold bg-purple-600 transition-all">SFW</button>
+                    <button onclick="handleToggle('nsfw')" id="nsfwBtn" class="px-3 py-1 rounded-full text-[10px] font-bold text-slate-400 transition-all">NSFW</button>
                 </div>
             </div>
         </div>
-    </div>
+        <div id="progress"></div>
 
-    <!-- Navigation Bar -->
-    <nav class="glass-nav sticky top-0 z-50 px-4 py-2">
-        <div class="max-w-[1800px] mx-auto flex flex-col gap-2">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center gap-4">
-                    <div class="flex items-center gap-2 cursor-pointer" onclick="openView('gallery')">
-                        <div class="w-7 h-7 rounded-lg flex items-center justify-center overflow-hidden bg-slate-800">
-                            <img src="https://i.pinimg.com/736x/8e/66/7e/8e667eb43ccda5c0a3712563a67f7587.jpg" 
-                                 class="w-full h-full object-cover" 
-                                 alt="Anime Hub" 
-                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                            <svg xmlns="http://www.w3.org/2000/svg" style="display:none" class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                        </div>
-                           <h1 class="text-md font-bold">Anime<span class="text-purple-500">Hub</span>   <span class="text-pink-500">  0.1<sup class="text-pink-500">  Beta </sup></span></h1>
-                    </div>
-                    <div class="hidden sm:flex items-center gap-3 text-[10px] font-bold uppercase tracking-tighter text-slate-500">
-                        <button onclick="openModal('aboutModal')" class="hover:text-white transition-colors">About</button>
-                        <span class="w-1 h-1 rounded-full bg-slate-800"></span>
-                        <button onclick="openView('fav')" id="favViewBtn" class="hover:text-white transition-colors">Collection</button>
-                        <span class="w-1 h-1 rounded-full bg-slate-800"></span>
-                        <button onclick="shareHub()" class="hover:text-purple-400 transition-colors flex items-center gap-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
-                            Share Hub
-                        </button>
+        <div class="px-4 py-2 flex items-center gap-6 overflow-x-auto hide-scrollbar border-t border-white/5">
+            <button onclick="setFormat('image')" id="imgTab" class="tab-btn active whitespace-nowrap text-xs font-bold text-slate-400">IMAGES</button>
+            <button onclick="setFormat('png')" id="pngTab" class="tab-btn whitespace-nowrap text-xs font-bold text-slate-400">PNG</button>
+            <button onclick="setFormat('gif')" id="gifTab" class="tab-btn whitespace-nowrap text-xs font-bold text-slate-400">GIFS</button>
+            <button onclick="setFormat('sticker')" id="stickerTab" class="tab-btn whitespace-nowrap text-xs font-bold text-slate-400">STICKERS</button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="pt-32 pb-24 min-h-screen">
+        <div class="px-4 mb-4">
+            <div class="flex items-center gap-2">
+                <div class="flex-1 relative">
+                    <select id="catSelect" onchange="resetAndFetch()" class="w-full bg-slate-900 border border-white/10 rounded-xl px-4 py-3 text-sm appearance-none focus:border-purple-500 outline-none transition-all"></select>
+                    <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none opacity-50">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
                     </div>
                 </div>
-                <div class="flex items-center gap-1 bg-slate-900/50 p-1 rounded-lg border border-white/5">
-                    <button id="sfwBtn" onclick="handleToggle('sfw')" class="px-3 py-1 rounded-md text-[10px] font-bold bg-purple-600 text-white transition-all">SFW</button>
-                    <button id="nsfwBtn" onclick="handleToggle('nsfw')" class="px-3 py-1 rounded-md text-[10px] font-bold text-slate-400 transition-all">NSFW</button>
-                </div>
+                <button onclick="shuffleCategory()" class="bg-slate-900 p-3.5 rounded-xl border border-white/10 active:scale-90 transition-transform">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke-width="2"/></svg>
+                </button>
             </div>
-
-            <div id="filterBar" class="flex items-center justify-between gap-2 border-t border-white/5 pt-1">
-                <div class="flex items-center gap-1 bg-slate-950 p-0.5 rounded-md border border-white/5 overflow-x-auto no-scrollbar">
-                    <button id="imgTab" onclick="setFormat('image')" class="whitespace-nowrap px-3 py-1 rounded text-[10px] font-bold tab-active transition-all">Images</button>
-                    <button id="pngTab" onclick="setFormat('png')" class="whitespace-nowrap px-3 py-1 rounded text-[10px] font-bold text-slate-500 hover:text-white transition-all">PNGs</button>
-                    <button id="gifTab" onclick="setFormat('gif')" class="whitespace-nowrap px-3 py-1 rounded text-[10px] font-bold text-slate-500 hover:text-white transition-all">GIFs</button>
-                    <button id="stickerTab" onclick="setFormat('sticker')" class="whitespace-nowrap px-3 py-1 rounded text-[10px] font-bold text-slate-500 hover:text-white transition-all">Stickers</button>
-                </div>
-                <div class="flex items-center gap-1.5 flex-1 max-w-[200px]">
-                    <select id="catSelect" onchange="resetAndFetch()" class="w-full bg-slate-900 border border-white/10 text-slate-300 text-[10px] rounded-md px-2 py-1 outline-none cursor-pointer"></select>
-                    <button onclick="shuffleCategory()" class="bg-white/5 p-1.5 rounded-md border border-white/10 hover:bg-white/10 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke-width="2"/></svg>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <main class="max-w-[1800px] mx-auto px-3 py-3">
-        <div id="favEmptyState" class="hidden flex-col items-center justify-center py-20 text-center">
-            <h3 class="text-lg font-bold text-white mb-2">Collection is empty</h3>
-            <p class="text-slate-500 text-sm">Heart some images to save them to your Anime Hub collection!</p>
-            <button onclick="openView('gallery')" class="mt-4 text-purple-400 text-xs font-bold uppercase tracking-widest hover:text-purple-300 transition-colors">Back to Gallery</button>
         </div>
 
         <div id="gallery" class="masonry-grid"></div>
-        <div id="loading" class="hidden masonry-grid"></div>
-        <div id="sentinel" class="h-20 w-full"></div>
+        <div id="loading" class="hidden grid grid-cols-2 gap-2 px-2">
+            <div class="h-48 bg-slate-900 rounded-xl animate-pulse"></div>
+            <div class="h-64 bg-slate-900 rounded-xl animate-pulse"></div>
+        </div>
+        <div id="sentinel" class="h-10"></div>
     </main>
 
-    <button id="backToTop" onclick="window.scrollTo({top:0, behavior:'smooth'})" class="fixed bottom-4 right-4 z-[60] bg-purple-600 p-2.5 rounded-lg shadow-xl hover:bg-purple-500 transition-all active:scale-95">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>
-    </button>
+    <!-- Bottom Navigation -->
+    <nav class="glass-footer fixed bottom-0 inset-x-0 z-40 px-6 py-2">
+        <div class="max-w-md mx-auto flex items-center justify-around">
+            <button onclick="openView('gallery')" id="navHome" class="flex flex-col items-center gap-1 text-purple-500">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                <span class="text-[10px] font-bold uppercase tracking-widest">Home</span>
+            </button>
+            <button onclick="openView('fav')" id="navFav" class="flex flex-col items-center gap-1 text-slate-500 transition-colors">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+                <span class="text-[10px] font-bold uppercase tracking-widest">Saved</span>
+            </button>
+            <button onclick="shareHub()" id="shareBtn" class="flex flex-col items-center gap-1 text-slate-500 transition-colors">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
+                <span class="text-[10px] font-bold uppercase tracking-widest">Share</span>
+            </button>
+        </div>
+    </nav>
 
-    <!-- Lightbox -->
-    <div id="lightbox" class="fixed inset-0 z-[100] hidden flex flex-col items-center justify-center p-4 bg-black/95 transition-opacity duration-300">
-        <button onclick="closeLightbox()" class="absolute top-4 right-4 p-2 bg-white/10 rounded-full hover:bg-white/20 transition-all"><svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>
-        <img id="lightboxImg" src="" class="max-w-full max-h-[75vh] rounded-lg object-contain shadow-2xl">
-        <div class="mt-6 flex gap-3">
-            <button id="lbFavBtn" class="bg-white/5 px-5 py-2.5 rounded-xl text-xs font-bold border border-white/10 flex items-center gap-2 hover:bg-white/10 transition-all active:scale-95">
-                <svg id="lbHeart" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
-                Save
+    <!-- Modals -->
+    <!-- About Modal -->
+    <div id="aboutModal" class="fixed inset-0 z-[200] hidden flex items-center justify-center p-6 bg-black/90 backdrop-blur-md">
+        <div class="w-full max-w-sm bg-slate-900 border border-white/10 rounded-3xl p-8 relative">
+            <button onclick="closeModal('aboutModal')" class="absolute top-4 right-4 text-slate-500">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
-            <button id="lbShareBtn" class="bg-blue-600 px-5 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 hover:bg-blue-500 transition-all active:scale-95">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
-                Share
-            </button>
-            <button id="downloadBtn" class="bg-purple-600 px-5 py-2.5 rounded-xl text-xs font-bold shadow-lg shadow-purple-600/20 hover:bg-purple-500 transition-all active:scale-95">Download HD</button>
+            <h2 class="text-2xl font-bold mb-4">About Hub</h2>
+            <div class="space-y-4 text-slate-400 text-sm leading-relaxed">
+                <p>Welcome to <span class="text-purple-400 font-bold">Anime Hub Mobile</span>.</p>
+                <p>Designed for browsing and collecting high-quality anime imagery on the go. All content is powered by the waifu.pics API.</p>
+                <div class="pt-4 border-t border-white/5 grid grid-cols-2 gap-4">
+                    <div>
+                        <span class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Version</span>
+                        <span class="text-white">2.2.0 Mobile</span>
+                    </div>
+                    <div>
+                        <span class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Source</span>
+                        <span class="text-white">waifu.pics</span>
+                    </div>
+                </div>
+            </div>
+            <button onclick="closeModal('aboutModal')" class="w-full mt-8 bg-purple-600 py-4 rounded-2xl font-bold text-white active:scale-95 transition-transform">Close</button>
         </div>
     </div>
 
-    <div id="toast" class="fixed bottom-10 left-1/2 -translate-x-1/2 bg-white text-black px-4 py-1.5 rounded-full shadow-2xl opacity-0 transition-all z-[110] font-bold text-[10px] pointer-events-none">Copied!</div>
+    <!-- Lightbox -->
+    <div id="lightbox" class="fixed inset-0 z-[100] hidden flex flex-col bg-black/95 transition-all duration-300">
+        <div class="p-4 flex justify-between items-center bg-gradient-to-b from-black/80 to-transparent">
+            <button onclick="closeLightbox()" class="p-2 bg-white/10 rounded-full active:scale-90"><svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2.5" d="M6 18L18 6M6 6l12 12" /></svg></button>
+            <div class="flex gap-2">
+                <button id="lbFavBtn" class="p-2 bg-white/10 rounded-full active:scale-90"><svg id="lbHeart" class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg></button>
+                <button id="lbShareBtn" class="p-2 bg-white/10 rounded-full active:scale-90"><svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2.5" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg></button>
+            </div>
+        </div>
+        <div class="flex-1 flex items-center justify-center p-2 overflow-hidden">
+            <img id="lightboxImg" src="" class="max-w-full max-h-full object-contain rounded-lg">
+        </div>
+        <div class="p-6 bg-gradient-to-t from-black/80 to-transparent">
+            <button id="downloadBtn" class="w-full bg-purple-600 py-4 rounded-2xl font-bold text-white shadow-xl active:scale-95 transition-transform">Download HD</button>
+        </div>
+    </div>
+
+    <!-- Age Verification -->
+    <div id="ageModal" class="fixed inset-0 z-[200] hidden flex items-center justify-center p-6 bg-black/98 backdrop-blur-2xl">
+        <div class="w-full bg-slate-900 border border-white/10 rounded-3xl p-8 text-center shadow-2xl">
+            <div class="w-16 h-16 bg-red-500/20 text-red-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+            </div>
+            <h2 class="text-xl font-bold mb-2">Age Restricted</h2>
+            <p class="text-slate-400 mb-8 text-sm">Please confirm you are 18+ to browse Adult categories.</p>
+            <div class="flex flex-col gap-3">
+                <button onclick="verifyAge()" class="w-full bg-red-600 py-4 rounded-2xl font-bold text-white active:scale-95">I am 18 or older</button>
+                <button onclick="closeModal('ageModal')" class="w-full bg-slate-800 py-4 rounded-2xl font-bold text-slate-300">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="fixed toast-mobile left-1/2 -translate-x-1/2 bg-white text-black px-6 py-3 rounded-2xl shadow-2xl opacity-0 translate-y-10 transition-all z-[150] font-bold text-xs pointer-events-none whitespace-nowrap"></div>
 
     <script>
         const CATEGORIES = {
@@ -267,69 +273,27 @@
 
         let currentType = 'sfw', currentFormat = 'image', currentView = 'gallery';
         let isLoading = false, isAdultVerified = false;
-        let favorites = JSON.parse(localStorage.getItem('anime_hub_favs') || '[]');
+        let favorites = JSON.parse(localStorage.getItem('anime_hub_favs_mob') || '[]');
 
         const gallery = document.getElementById('gallery');
         const catSelect = document.getElementById('catSelect');
         const lightbox = document.getElementById('lightbox');
         const lightboxImg = document.getElementById('lightboxImg');
-        const toast = document.getElementById('toast');
 
         function setupCategories() {
             const list = CATEGORIES[currentType][currentFormat];
             catSelect.innerHTML = list.map(cat => `<option value="${cat}">${cat.charAt(0).toUpperCase() + cat.slice(1)}</option>`).join('');
         }
 
-        const observer = new IntersectionObserver((entries) => {
-            if (entries[0].isIntersecting && !isLoading && currentView === 'gallery') fetchImages();
+        const observer = new IntersectionObserver((e) => {
+            if (e[0].isIntersecting && !isLoading && currentView === 'gallery') fetchImages();
         }, { threshold: 0.1 });
-
         observer.observe(document.getElementById('sentinel'));
 
-        // Share the whole website
-        async function shareHub() {
-            const shareData = {
-                title: 'Anime Hub',
-                text: 'Check out Anime Hub for the best anime gallery and animated stickers!',
-                url: window.location.href
-            };
-            if (navigator.share) {
-                try {
-                    await navigator.share(shareData);
-                } catch (err) {
-                    copyToClipboard(window.location.href, "Hub Link Copied!");
-                }
-            } else {
-                copyToClipboard(window.location.href, "Hub Link Copied!");
-            }
-        }
-
-        // Share specific content (Image/GIF)
-        async function shareContent(url, e) {
-            if (e) e.stopPropagation();
-            const shareData = {
-                title: 'Anime Hub Content',
-                text: 'Check out this awesome anime art I found on Anime Hub!',
-                url: url
-            };
-            if (navigator.share) {
-                try {
-                    await navigator.share(shareData);
-                } catch (err) {
-                    copyToClipboard(url, "Link Copied!");
-                }
-            } else {
-                copyToClipboard(url, "Link Copied!");
-            }
-        }
-
-        async function fetchImages(attempt = 0) {
+        async function fetchImages() {
             if (isLoading || !catSelect.value) return;
-            
             isLoading = true;
-            showSkeletons(true);
-
-            const apiFormat = (currentFormat === 'gif' || currentFormat === 'sticker') ? 'gif' : 'image';
+            document.getElementById('loading').classList.remove('hidden');
 
             try {
                 const response = await fetch(`https://api.waifu.pics/many/${currentType}/${catSelect.value}`, {
@@ -338,67 +302,33 @@
                     body: JSON.stringify({})
                 });
                 const data = await response.json();
-                
                 if (data.files) {
-                    let filesToRender = data.files;
-                    if (currentFormat === 'png') {
-                        filesToRender = filesToRender.filter(url => url.toLowerCase().endsWith('.png'));
-                    }
-
-                    const fragment = document.createDocumentFragment();
-                    filesToRender.forEach(url => fragment.appendChild(createCard(url)));
-                    gallery.appendChild(fragment);
-
-                    if (currentFormat === 'png' && filesToRender.length < 5 && attempt < 2) {
-                        isLoading = false;
-                        fetchImages(attempt + 1);
-                        return;
-                    }
+                    let files = data.files;
+                    if (currentFormat === 'png') files = files.filter(u => u.toLowerCase().endsWith('.png'));
+                    files.forEach(url => gallery.appendChild(createMobileCard(url)));
                 }
             } catch (err) {
-                showToast("Connection Error");
+                showToast("Connection failed");
             } finally {
                 isLoading = false;
-                showSkeletons(false);
+                document.getElementById('loading').classList.add('hidden');
             }
         }
 
-        function createCard(url) {
+        function createMobileCard(url) {
             const div = document.createElement('div');
-            div.className = 'masonry-item group';
-            div.setAttribute('data-url', url);
+            div.className = 'masonry-item img-reveal';
             const isFav = favorites.includes(url);
-            
             div.innerHTML = `
-                <div class="img-card relative bg-slate-900 rounded-xl overflow-hidden border border-white/5 cursor-pointer">
-                    <div class="absolute top-2 right-2 z-10 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <!-- Quick Share Button -->
-                        <button onclick="shareContent('${url}', event)" class="p-1.5 bg-black/40 backdrop-blur-md rounded-lg hover:bg-purple-600 transition-colors">
-                            <svg class="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
-                        </button>
-                        <button onclick="toggleFavorite('${url}', event)" class="p-1.5 bg-black/40 backdrop-blur-md rounded-lg transition-colors">
-                            <svg class="w-3.5 h-3.5 ${isFav ? 'fav-active' : 'text-white'}" fill="${isFav ? 'currentColor' : 'none'}" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
-                        </button>
-                    </div>
-                    <img src="${url}" loading="lazy" class="img-entry w-full h-auto" 
-                         onload="this.classList.add('img-loaded')"
-                         onerror="this.parentElement.parentElement.remove()">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 pointer-events-none"></div>
+                <img src="${url}" loading="lazy" class="w-full h-auto block" onload="this.parentElement.classList.add('loaded')">
+                <div class="absolute bottom-2 right-2 flex gap-1">
+                    <button onclick="toggleFavorite('${url}', event)" class="p-2 bg-black/40 backdrop-blur-md rounded-lg shadow-lg">
+                        <svg class="w-4 h-4 ${isFav ? 'text-red-500 fill-current' : 'text-white'}" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-width="2.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+                    </button>
                 </div>
             `;
             div.onclick = () => openLightbox(url);
             return div;
-        }
-
-        function resetAndFetch() {
-            gallery.innerHTML = '';
-            fetchImages();
-        }
-
-        function showSkeletons(show) {
-            const loader = document.getElementById('loading');
-            loader.innerHTML = show ? Array(8).fill('<div class="masonry-item skeleton h-64"></div>').join('') : '';
-            loader.classList.toggle('hidden', !show);
         }
 
         function toggleFavorite(url, e) {
@@ -406,158 +336,148 @@
             const idx = favorites.indexOf(url);
             if (idx === -1) {
                 favorites.push(url);
-                showToast("Saved to Hub");
+                showToast("Saved to collection");
             } else {
                 favorites.splice(idx, 1);
-                showToast("Removed");
+                showToast("Removed from collection");
                 if (currentView === 'fav') openView('fav');
             }
-            localStorage.setItem('anime_hub_favs', JSON.stringify(favorites));
-            updateUI(url);
+            localStorage.setItem('anime_hub_favs_mob', JSON.stringify(favorites));
+            updateHeartUI(url);
         }
 
-        function updateUI(url) {
+        function updateHeartUI(url) {
             const isFav = favorites.includes(url);
             const lbHeart = document.getElementById('lbHeart');
             if (lightboxImg.src === url) {
-                lbHeart.classList.toggle('fav-active', isFav);
-                lbHeart.setAttribute('fill', isFav ? 'currentColor' : 'none');
+                lbHeart.classList.toggle('text-red-500', isFav);
+                lbHeart.classList.toggle('fill-current', isFav);
             }
-            document.querySelectorAll(`[data-url="${CSS.escape(url)}"] svg:not(.text-white)`).forEach(svg => {
-                // Find hearts in the cards
-                if (svg.parentNode.onclick.toString().includes('toggleFavorite')) {
-                    svg.classList.toggle('fav-active', isFav);
-                    svg.setAttribute('fill', isFav ? 'currentColor' : 'none');
+            document.querySelectorAll(`img[src="${url}"]`).forEach(img => {
+                const btn = img.parentElement.querySelector('button svg');
+                if (btn) {
+                    btn.classList.toggle('text-red-500', isFav);
+                    btn.classList.toggle('fill-current', isFav);
                 }
             });
         }
 
-        function openLightbox(url) {
-            lightboxImg.src = url;
-            lightbox.classList.remove('hidden');
-            lightbox.classList.add('flex');
-            document.body.style.overflow = 'hidden';
-            updateUI(url);
-
-            document.getElementById('lbFavBtn').onclick = () => toggleFavorite(url);
-            document.getElementById('lbShareBtn').onclick = () => shareContent(url);
-            
-            document.getElementById('downloadBtn').onclick = async () => {
-                showToast("Trying HD save...");
-                try {
-                    const res = await fetch(url, { mode: 'cors' });
-                    if (!res.ok) throw new Error('CORS');
-                    const blob = await res.blob();
-                    const lnk = document.createElement('a');
-                    lnk.href = URL.createObjectURL(blob);
-                    lnk.download = `anime-hub-${Date.now()}.gif`;
-                    document.body.appendChild(lnk);
-                    lnk.click();
-                    document.body.removeChild(lnk);
-                } catch (e) { 
-                    window.open(url, '_blank');
-                    showToast("Opening source...");
-                }
-            };
+        function setFormat(f) {
+            currentFormat = f;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(f + 'Tab').classList.add('active');
+            setupCategories(); resetAndFetch();
         }
 
-        function closeLightbox() { lightbox.classList.add('hidden'); document.body.style.overflow = 'auto'; }
-        
-        function handleToggle(t) { 
-            if (t === 'nsfw' && !isAdultVerified) { document.getElementById('ageModal').classList.remove('hidden'); return; }
+        function handleToggle(t) {
+            if (t === 'nsfw' && !isAdultVerified) { openModal('ageModal'); return; }
             currentType = t;
             document.getElementById('sfwBtn').classList.toggle('bg-purple-600', t === 'sfw');
+            document.getElementById('sfwBtn').classList.toggle('text-slate-400', t === 'nsfw');
             document.getElementById('nsfwBtn').classList.toggle('bg-red-600', t === 'nsfw');
+            document.getElementById('nsfwBtn').classList.toggle('text-slate-400', t === 'sfw');
             setupCategories(); resetAndFetch();
         }
 
-        function verifyAge() { isAdultVerified = true; document.getElementById('ageModal').classList.add('hidden'); handleToggle('nsfw'); }
-        function closeAgeModal() { document.getElementById('ageModal').classList.add('hidden'); }
-        
-        function showToast(m) { 
-            toast.textContent = m; 
-            toast.classList.replace('opacity-0', 'opacity-100'); 
-            setTimeout(() => toast.classList.replace('opacity-100', 'opacity-0'), 1500); 
+        function openView(v) {
+            currentView = v;
+            gallery.innerHTML = '';
+            document.getElementById('navHome').classList.toggle('text-purple-500', v === 'gallery');
+            document.getElementById('navHome').classList.toggle('text-slate-500', v === 'fav');
+            document.getElementById('navFav').classList.toggle('text-purple-500', v === 'fav');
+            document.getElementById('navFav').classList.toggle('text-slate-500', v === 'gallery');
+
+            if (v === 'fav') {
+                favorites.forEach(url => gallery.appendChild(createMobileCard(url)));
+                if (favorites.length === 0) showToast("Your collection is empty");
+            } else {
+                resetAndFetch();
+            }
+            scrollToTop();
         }
 
-        function setFormat(f) { 
-            currentFormat = f; 
-            document.getElementById('imgTab').classList.toggle('tab-active', f === 'image');
-            document.getElementById('pngTab').classList.toggle('tab-active', f === 'png');
-            document.getElementById('gifTab').classList.toggle('tab-active', f === 'gif');
-            document.getElementById('stickerTab').classList.toggle('tab-active', f === 'sticker');
-
-            ['imgTab', 'pngTab', 'gifTab', 'stickerTab'].forEach(id => {
-                const btn = document.getElementById(id);
-                if (btn.classList.contains('tab-active')) {
-                    btn.classList.remove('text-slate-500');
-                } else {
-                    btn.classList.add('text-slate-500');
-                }
-            });
-
-            setupCategories(); resetAndFetch();
-        }
-
+        function resetAndFetch() { gallery.innerHTML = ''; fetchImages(); }
+        function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
         function shuffleCategory() {
             const l = CATEGORIES[currentType][currentFormat];
             catSelect.value = l[Math.floor(Math.random() * l.length)];
             resetAndFetch();
         }
 
-        function openView(v) {
-            currentView = v;
-            gallery.innerHTML = '';
-            document.getElementById('filterBar').classList.toggle('hidden', v === 'fav');
-            if (v === 'fav') {
-                document.getElementById('favViewBtn').classList.add('text-white');
-                if (favorites.length === 0) document.getElementById('favEmptyState').classList.remove('hidden');
-                else {
-                    document.getElementById('favEmptyState').classList.add('hidden');
-                    favorites.forEach(url => gallery.appendChild(createCard(url)));
+        function openLightbox(url) {
+            lightboxImg.src = url;
+            lightbox.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            updateHeartUI(url);
+            document.getElementById('lbFavBtn').onclick = () => toggleFavorite(url);
+            document.getElementById('lbShareBtn').onclick = () => shareContent(url);
+            document.getElementById('downloadBtn').onclick = () => window.open(url, '_blank');
+        }
+
+        function closeLightbox() { lightbox.classList.add('hidden'); document.body.style.overflow = 'auto'; }
+        
+        async function shareHub() {
+            const url = window.location.href;
+            if (navigator.share) {
+                try {
+                    await navigator.share({ title: 'Anime Hub', text: 'Best Anime imagery on mobile', url: url });
+                } catch (err) {
+                    copyToClipboard(url, "Link copied to clipboard");
                 }
             } else {
-                document.getElementById('favViewBtn').classList.remove('text-white');
-                document.getElementById('favEmptyState').classList.add('hidden');
-                resetAndFetch();
+                copyToClipboard(url, "Link copied to clipboard");
             }
         }
 
-        function copyToClipboard(text, msg = "Copied!") {
-            const el = document.createElement('textarea');
-            el.value = text;
-            document.body.appendChild(el);
-            el.select();
-            document.execCommand('copy');
-            document.body.removeChild(el);
-            showToast(msg);
+        async function shareContent(url) {
+            if (navigator.share) {
+                try {
+                    await navigator.share({ title: 'Anime Art', text: 'Found this on Anime Hub', url: url });
+                } catch (err) {
+                    copyToClipboard(url, "Image link copied to clipboard");
+                }
+            } else {
+                copyToClipboard(url, "Image link copied to clipboard");
+            }
         }
 
-        window.addEventListener('scroll', () => { 
-            if (window.scrollY > 400) document.getElementById('backToTop').classList.add('visible'); 
-            else document.getElementById('backToTop').classList.remove('visible'); 
+        function copyToClipboard(text, msg) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                showToast(msg);
+            } catch (err) {
+                showToast("Failed to copy link");
+            }
+            document.body.removeChild(textArea);
+        }
+
+        function showToast(m) {
+            const t = document.getElementById('toast');
+            t.textContent = m;
+            t.classList.replace('opacity-0', 'opacity-100');
+            t.classList.replace('translate-y-10', 'translate-y-0');
+            setTimeout(() => {
+                t.classList.replace('opacity-100', 'opacity-0');
+                t.classList.replace('translate-y-0', 'translate-y-10');
+            }, 2000);
+        }
+
+        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+        function verifyAge() { isAdultVerified = true; closeModal('ageModal'); handleToggle('nsfw'); }
+
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById("progress").style.width = scrolled + "%";
         });
 
-        lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
-        window.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeLightbox(); closeAgeModal(); closeModal('aboutModal'); } });
-
         window.onload = () => { setupCategories(); fetchImages(); };
-        // ===== ABOUT MODAL FUNCTIONS =====
-function openModal(id) {
-    const modal = document.getElementById(id);
-    if (!modal) return;
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeModal(id) {
-    const modal = document.getElementById(id);
-    if (!modal) return;
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
-    document.body.style.overflow = 'auto';
-}
     </script>
 </body>
 </html>
